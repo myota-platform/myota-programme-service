@@ -8,6 +8,7 @@ This repository is a runnable vertical-slice bootstrap for the service repositor
 
 - Amateur-radio-aware identity: operator/SWL participation, multiple callsigns, one primary callsign, lifecycle and verification fields.
 - Programme configuration: programme-owned entity types, rules, minimum QSOs, awards, theme and optional OIDC settings.
+- Form-managed programme entity categories with stable codes, geometry kinds, descriptions, active/inactive lifecycle, and explicit APIs for administration.
 - Geodata lifecycle: imported candidate → community proposal → approver review → approved entity.
 - Provenance-aware imports with adapter metadata for ParkServe, OSM, government GIS and manual proposals.
 - Activation and QSO primitives with idempotency keys and audit events.
