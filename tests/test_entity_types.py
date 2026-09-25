@@ -7,14 +7,17 @@ class EntityTypeManagementTests(unittest.TestCase):
     def setUp(self):
         self.previous_items = ProgrammeHandler.store.items
         self.previous_events = ProgrammeHandler.store.events
+        self.previous_data = ProgrammeHandler.store.data
         ProgrammeHandler.store.items = {
             "demo": {"id": "programme-1", "entityTypes": [{"code": "MUNICIPAL_PARK", "label": "Municipal park", "geometry": "MULTIPOLYGON"}], "policyVersion": 1}
         }
         ProgrammeHandler.store.events = []
+        ProgrammeHandler.store.data = {}
 
     def tearDown(self):
         ProgrammeHandler.store.items = self.previous_items
         ProgrammeHandler.store.events = self.previous_events
+        ProgrammeHandler.store.data = self.previous_data
 
     def test_creates_and_updates_programme_category(self):
         result = ProgrammeHandler.save_entity_type(None, {"slug": "demo", "_body": {
@@ -34,6 +37,20 @@ class EntityTypeManagementTests(unittest.TestCase):
             ProgrammeHandler.save_entity_type(None, {"slug": "demo", "_body": {
                 "code": "CITY_PARK", "originalCode": "MUNICIPAL_PARK", "label": "City park", "geometry": "POLYGON"
             }})
+
+    def test_category_can_be_assigned_to_multiple_programmes(self):
+        ProgrammeHandler.store.items["second"] = {"id": "programme-2", "entityTypes": [], "policyVersion": 1}
+        ProgrammeHandler.save_entity_type_catalog(None, {"_body": {
+            "code": "TRAIL", "label": "Trail", "geometry": "LINESTRING"
+        }})
+        ProgrammeHandler.assign_entity_type(None, {"slug": "demo", "_body": {"code": "TRAIL"}})
+        ProgrammeHandler.assign_entity_type(None, {"slug": "second", "_body": {"code": "TRAIL"}})
+
+        self.assertEqual([item["code"] for item in ProgrammeHandler.list_entity_types(None, {"slug": "demo"})["items"]], ["MUNICIPAL_PARK", "TRAIL"])
+        self.assertEqual([item["code"] for item in ProgrammeHandler.list_entity_types(None, {"slug": "second"})["items"]], ["TRAIL"])
+
+        ProgrammeHandler.unassign_entity_type(None, {"slug": "demo", "_body": {"code": "TRAIL"}})
+        self.assertEqual([item["code"] for item in ProgrammeHandler.list_entity_types(None, {"slug": "second"})["items"]], ["TRAIL"])
 
 
 if __name__ == "__main__":
