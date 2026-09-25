@@ -52,6 +52,13 @@ class EntityTypeManagementTests(unittest.TestCase):
         ProgrammeHandler.unassign_entity_type(None, {"slug": "demo", "_body": {"code": "TRAIL"}})
         self.assertEqual([item["code"] for item in ProgrammeHandler.list_entity_types(None, {"slug": "second"})["items"]], ["TRAIL"])
 
+    def test_category_accepts_multiple_geometry_types(self):
+        result = ProgrammeHandler.save_entity_type_catalog(None, {"_body": {
+            "code": "OUTDOOR_SITE", "label": "Outdoor site",
+            "geometryTypes": ["Point", "LineString", "MultiLineString", "Polygon", "MultiPolygon"]
+        }})
+        self.assertEqual(result["entityType"]["geometryTypes"], ["POINT", "LINESTRING", "MULTILINESTRING", "POLYGON", "MULTIPOLYGON"])
+
 
 if __name__ == "__main__":
     unittest.main()
