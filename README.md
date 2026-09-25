@@ -15,6 +15,24 @@ This repository is a runnable vertical-slice bootstrap for the service repositor
 - Universal themed frontend with verified/candidate map distinction.
 - OpenAPI and event contracts, ADRs, migration notes, health endpoints and local deployment manifests.
 
+## Configuration gap baseline
+
+The service currently exposes the vertical-slice primitives, but programme
+configuration is not yet a complete governance and policy control plane. In
+particular, the editor still needs programme lifecycle/version publication,
+owner and legal metadata, locale/default/fallback management, jurisdiction and
+approver-scope configuration, schema-driven activation/QSO/geodata/privacy
+policy forms, OIDC administration, notification/public-output defaults, and a
+policy simulator with historical snapshots.
+
+The authoritative list, ownership boundaries, priorities, and non-goals are
+maintained in
+[`myota-docs/docs/programme-configuration-gap-analysis.md`](https://github.com/myota-platform/myota-docs/blob/main/docs/programme-configuration-gap-analysis.md).
+The `oidc` and `locales` fields already exist in the bootstrap data model, but
+their complete administration workflow is still pending. Generic policy JSON
+drafts are compatibility scaffolding until the programme-owned schemas are
+implemented.
+
 The default test/runtime adapter is in-memory so the slice can be exercised without third-party Python packages. PostgreSQL/PostGIS is the production storage target and is defined in `db/migrations/`.
 
 ## Run the vertical slice
