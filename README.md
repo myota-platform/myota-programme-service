@@ -1,19 +1,23 @@
-# MyOTA Outdoor Activation Platform
+# MyOTA programme service
 
 MyOTA is a programme-agnostic platform for outdoor activation programmes. MPOTA is represented as a configured programme, not as the platform itself. No rules or charter text are copied from POTA or any other programme: every programme supplies its own configuration, policy, eligibility, awards and public charter.
 
-This repository is a runnable vertical-slice bootstrap for the service repositories described in [`docs/repository-map.md`](docs/repository-map.md). It contains four independently runnable Python services, an API-first contract, a universal browser UI, PostGIS migrations, and Kubernetes/Helm deployment assets.
+This repository owns programme configuration and shared entity-category master
+data. It publishes programme-owned policy inputs, themes, content, locales,
+jurisdictions, assignments, and optional OIDC mappings for the other services
+to consume. Awards and activity execution belong to myota-activity-service;
+entities and imports belong to myota-geodata-service.
 
 ## What works now
 
-- Amateur-radio-aware identity: operator/SWL participation, multiple callsigns, one primary callsign, lifecycle and verification fields.
+- Identity, geodata, activity, and public/admin web capabilities are separate
+  repositories; this service exposes their programme policy inputs.
 - Programme configuration: shared entity category assignments, programme-owned rules, minimum QSOs, awards, theme and optional OIDC settings.
 - Shared category master data with stable codes, geometry kinds, descriptions, active/inactive lifecycle, reusable across programmes, and explicit assignment APIs for administration.
 - Geodata lifecycle: imported candidate → community proposal → approver review → approved entity.
 - Provenance-aware imports with adapter metadata for ParkServe, OSM, government GIS and manual proposals.
-- Activation and QSO primitives with idempotency keys and audit events.
-- Universal themed frontend with verified/candidate map distinction.
-- OpenAPI and event contracts, ADRs, migration notes, health endpoints and local deployment manifests.
+- The current slice provides category master data and assignments, programme
+  rules/themes/content/OIDC fields, and configuration-gap tracking.
 
 ## Configuration gap baseline
 
@@ -48,7 +52,10 @@ For a containerized PostGIS environment, use `docker compose up --build` after s
 
 ## Architecture
 
-Read [`docs/architecture.md`](docs/architecture.md), [`docs/adr/0001-storage-topology.md`](docs/adr/0001-storage-topology.md), and [`docs/repository-map.md`](docs/repository-map.md). The current bootstrap is kept together to make the vertical slice easy to run; the repository map defines the justified GitHub split once the MyOTA organization is available.
+Read the [project charter](https://github.com/myota-platform/myota-docs/blob/main/docs/project-charter.md)
+and [repository map](https://github.com/myota-platform/myota-docs/blob/main/docs/repository-map.md).
+The [programme configuration gap analysis](https://github.com/myota-platform/myota-docs/blob/main/docs/programme-configuration-gap-analysis.md)
+is the authoritative backlog for this service and its admin UI.
 
 ## Source project
 
