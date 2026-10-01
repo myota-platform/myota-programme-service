@@ -19,6 +19,11 @@ entities and imports belong to myota-geodata-service.
 - The current slice provides category master data and assignments, programme
   rules/themes/content/OIDC fields, and configuration-gap tracking.
 
+Phase 1 adds `PATCH /v1/programmes/{slug}`, idempotent `PUT`/`DELETE` category
+membership resources, and `PATCH` resources for programme content and policy
+draft lifecycle transitions. Legacy action routes remain available as
+deprecated aliases; see the [Phase 1 API resource update record](https://github.com/myota-platform/myota-docs/blob/main/docs/api-phase1-resource-updates.md).
+
 ## Configuration gap baseline
 
 The service currently exposes the vertical-slice primitives, but programme

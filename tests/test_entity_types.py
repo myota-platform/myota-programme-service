@@ -59,6 +59,31 @@ class EntityTypeManagementTests(unittest.TestCase):
         }})
         self.assertEqual(result["entityType"]["geometryTypes"], ["POINT", "LINESTRING", "MULTILINESTRING", "POLYGON", "MULTIPOLYGON"])
 
+    def test_resource_aliases_preserve_assignment_and_content_lifecycle(self):
+        ProgrammeHandler.save_entity_type_catalog(None, {"_body": {
+            "code": "TRAIL", "label": "Trail", "geometry": "LINESTRING"
+        }})
+        assigned = ProgrammeHandler.assign_entity_type_resource(None, {"slug": "demo", "categoryCode": "TRAIL", "Idempotency-Key": "assign-trail"})
+        event_count = len(ProgrammeHandler.store.events)
+        repeated = ProgrammeHandler.assign_entity_type_resource(None, {"slug": "demo", "categoryCode": "TRAIL", "Idempotency-Key": "assign-trail"})
+        self.assertIn("TRAIL", [item["code"] for item in assigned["items"]])
+        self.assertEqual(repeated, assigned)
+        self.assertEqual(len(ProgrammeHandler.store.events), event_count)
+        removed = ProgrammeHandler.unassign_entity_type_resource(None, {"slug": "demo", "categoryCode": "TRAIL", "Idempotency-Key": "unassign-trail"})
+        self.assertNotIn("TRAIL", [item["code"] for item in removed["items"]])
+
+        content = ProgrammeHandler.save_content(None, {"slug": "demo", "_body": {
+            "key": "programme.title", "locale": "en", "value": "Draft title"
+        }})
+        content = ProgrammeHandler.patch_content(None, {"slug": "demo", "contentId": content["id"], "_body": {
+            "value": "Updated title"
+        }})
+        self.assertEqual(content["value"], "Updated title")
+        content = ProgrammeHandler.patch_content(None, {"slug": "demo", "contentId": content["id"], "_body": {
+            "status": "UNDER_REVIEW"
+        }})
+        self.assertEqual(content["status"], "UNDER_REVIEW")
+
 
 if __name__ == "__main__":
     unittest.main()
