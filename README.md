@@ -44,6 +44,10 @@ implemented.
 
 The default test/runtime adapter is in-memory so the slice can be exercised without third-party Python packages. PostgreSQL/PostGIS is the production storage target and is defined in `db/migrations/`.
 
+The durable runtime exposes programme, catalogue and category-assignment
+aggregates at `/metrics`; collection and distributed request telemetry are
+provided through the OpenTelemetry deployment boundary.
+
 ## Run the vertical slice
 
 ```bash
