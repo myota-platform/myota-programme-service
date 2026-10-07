@@ -14,8 +14,8 @@ entities and imports belong to myota-geodata-service.
   repositories; this service exposes their programme policy inputs.
 - Programme configuration: shared entity category assignments, programme-owned rules, minimum QSOs, awards, theme and optional OIDC settings.
 - Shared category master data with stable codes, geometry kinds, descriptions, active/inactive lifecycle, reusable across programmes, and explicit assignment APIs for administration.
-- Geodata lifecycle: imported candidate → community proposal → approver review → approved entity.
-- Provenance-aware imports with adapter metadata for ParkServe, OSM, government GIS and manual proposals.
+- Entity imports and community proposals belong to geodata and are distinct
+  sources of candidates, not successive programme lifecycle steps.
 - The current slice provides category master data and assignments, programme
   rules/themes/content/OIDC fields, and configuration-gap tracking.
 
@@ -42,22 +42,26 @@ their complete administration workflow is still pending. Generic policy JSON
 drafts are compatibility scaffolding until the programme-owned schemas are
 implemented.
 
-The default test/runtime adapter is in-memory so the slice can be exercised without third-party Python packages. PostgreSQL/PostGIS is the production storage target and is defined in `db/migrations/`.
+The unit-test adapter may run in memory. Durable deployment uses plain
+PostgreSQL `myota_core`; only geodata needs PostGIS. Core migrations are
+orchestrated by `myota-deploy`, with integration mirrors in `myota-platform`.
 
 The durable runtime exposes programme, catalogue and category-assignment
 aggregates at `/metrics`; collection and distributed request telemetry are
 provided through the OpenTelemetry deployment boundary.
 
-## Run the vertical slice
+## Test and run locally
 
 ```bash
+python3 -m pip install -r requirements.txt
 python3 -m unittest discover -s tests -v
-python3 services/dev_server.py
+python3 run_programmes.py
 ```
 
-Open <http://127.0.0.1:8080>. The dev server starts the four services on ports 8001–8004 and proxies the browser API calls. It is intentionally dependency-free.
-
-For a containerized PostGIS environment, use `docker compose up --build` after starting Colima. The image uses the same service code with `SERVICE=identity|programmes|geodata|activity`.
+The standalone entry point listens on port 8002; configure database and
+authentication settings explicitly. For the full durable local environment,
+start Colima and use [myota-deploy](https://github.com/myota-platform/myota-deploy#run-the-vertical-slice).
+Administration is at port 8090 and uses APIs, never direct database access.
 
 ## Architecture
 
@@ -68,4 +72,5 @@ is the authoritative backlog for this service and its admin UI.
 
 ## Source project
 
-The original `ea7klk/mpota` repository remains untouched. Its charter and planned flows are treated as the migration source; see [`docs/migration-from-mpota.md`](docs/migration-from-mpota.md).
+The original `ea7klk/mpota` repository remains untouched; see the
+[migration strategy](https://github.com/myota-platform/myota-docs/blob/main/docs/migration-from-mpota.md).
