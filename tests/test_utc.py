@@ -58,7 +58,9 @@ class UtcEffectiveDateTests(unittest.TestCase):
                     "_body": {
                         "name": "UTC policy",
                         "type": "RULES",
-                        "schema": {},
+                        "schema": {
+                            "rules": {"minimumQsos": {"activation": 0}}
+                        },
                         "effectiveFrom": "2026-10-09T14:45:30+02:00",
                     },
                 },
@@ -78,6 +80,8 @@ class UtcEffectiveDateTests(unittest.TestCase):
                     },
                 },
             )
-            self.assertEqual(policy["effectiveFrom"], "2026-10-09T12:45:30Z")
+            self.assertEqual(
+                policy["draft"]["effectiveFrom"], "2026-10-09T12:45:30Z"
+            )
         finally:
             store.items, store.data, store.events = previous
