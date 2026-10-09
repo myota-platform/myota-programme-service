@@ -10,6 +10,11 @@ entities and imports belong to myota-geodata-service.
 
 ## What works now
 
+- Programme policy/content effective dates are normalized to UTC before
+  publication, persistence and event emission. Legacy unqualified date-times
+  mean UTC, never server local time. Offset-bearing instants are preserved;
+  invalid dates are rejected. Tests run in a deliberately non-UTC timezone.
+  See the [UTC policy](https://github.com/myota-platform/myota-docs/blob/main/docs/utc-time-policy.md).
 - Identity, geodata, activity, and public/admin web capabilities are separate
   repositories; this service exposes their programme policy inputs.
 - Programme configuration: shared entity category assignments, programme-owned rules, minimum QSOs, awards, theme and optional OIDC settings.
