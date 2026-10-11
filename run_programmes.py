@@ -1,4 +1,9 @@
 from http.server import ThreadingHTTPServer
+
+from myota_logging import configure_logging
+
+configure_logging("myota-programmes", component="api")
+
 from programmes import ProgrammeHandler, seed
 
 seed()
