@@ -51,9 +51,11 @@ The unit-test adapter may run in memory. Durable deployment uses plain
 PostgreSQL `myota_core`; only geodata needs PostGIS. Core migrations are
 orchestrated by `myota-deploy`, with integration mirrors in `myota-platform`.
 
-The durable runtime exposes programme, catalogue and category-assignment
-aggregates at `/metrics`; collection and distributed request telemetry are
-provided through the OpenTelemetry deployment boundary.
+The durable runtime exposes aggregate programme, entity-type catalogue, and
+programme-to-category assignment gauges at `/metrics`. These metrics contain
+no programme slugs, entity identifiers, or user data. Collection and
+distributed request telemetry are provided through the OpenTelemetry
+deployment boundary.
 
 ## Test and run locally
 
