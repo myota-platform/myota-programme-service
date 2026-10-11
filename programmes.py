@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from myota_logging import configure_logging
+
 from datetime import datetime, timezone
 from http.server import ThreadingHTTPServer
 import re
@@ -1123,5 +1125,6 @@ def seed() -> None:
 
 
 if __name__ == "__main__":
+    configure_logging("myota-programmes", component="api")
     seed()
     ThreadingHTTPServer(("0.0.0.0", 8002), ProgrammeHandler).serve_forever()
