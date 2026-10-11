@@ -52,10 +52,11 @@ PostgreSQL `myota_core`; only geodata needs PostGIS. Core migrations are
 orchestrated by `myota-deploy`, with integration mirrors in `myota-platform`.
 
 The durable runtime exposes aggregate programme, entity-type catalogue, and
-programme-to-category assignment gauges at `/metrics`. These metrics contain
-no programme slugs, entity identifiers, or user data. Collection and
-distributed request telemetry are provided through the OpenTelemetry
-deployment boundary.
+assignment gauges at `/metrics`, together with bounded HTTP request
+counters and duration histograms. Request labels use only HTTP method, declared
+route template, and status code; gauges contain no programme slugs, entity
+identifiers, or user data. The OTel Collector scrapes `/metrics` every 15
+seconds.
 
 ## Test and run locally
 
