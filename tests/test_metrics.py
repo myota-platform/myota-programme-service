@@ -19,7 +19,7 @@ class ProgrammeMetricsTests(unittest.TestCase):
             output,
         )
         self.assertIn(
-            'myota_http_server_duration_milliseconds_bucket{'
+            "myota_http_server_duration_milliseconds_bucket{"
             'http_request_method="GET",http_route="/v1/programmes/{slug}",'
             'http_response_status_code="200",le="25"} 1',
             output,
